@@ -3,10 +3,37 @@ const router = express.Router();
 const Category = require("./Category.js");
 const slugify = require("slugify");
 
+//  === ROTAS GET ===
+router.get("/admin/categories", (req, res) => {
+    Category.findAll().then(categories => {
+        res.render("admin/categories/index.ejs", {
+            categories: categories
+        });
+    });
+});
+
 router.get("/admin/categories/new", (req, res) => {
     res.render("admin/categories/new");
 });
 
+router.get("/admin/categories/edit/:id", (req, res) => {
+    var id = req.params.id;
+    if (isNaN(id)) res.redirect("/admin/categories");
+    Category.findByPk(id).then(category => {
+        if (category) {
+            res.render("admin/categories/edit.ejs", {
+                category: category
+            });
+        } else {
+            res.redirect("/admin/categories");
+        }
+    }).catch(error => {
+        console.log(error);
+        res.redirect("/admin/categories");
+    });
+});
+
+//  === ROTAS POST ===
 router.post("/categories/save", (req, res) => {
     var title = req.body.title;
     if (title) {
@@ -19,14 +46,6 @@ router.post("/categories/save", (req, res) => {
     } else {
         res.redirect("/admin/categories/new");
     }
-});
-
-router.get("/admin/categories", (req, res) => {
-    Category.findAll().then(categories => {
-        res.render("admin/categories/index.ejs", {
-            categories: categories
-        });
-    });
 });
 
 router.post("/categories/delete", (req, res) => {
@@ -46,22 +65,6 @@ router.post("/categories/delete", (req, res) => {
     }
 })
 
-router.get("/admin/categories/edit/:id", (req, res) => {
-    var id = req.params.id;
-    if (isNaN(id)) res.redirect("/admin/categories");
-    Category.findByPk(id).then(category => {
-        if (category) {
-            res.render("admin/categories/edit.ejs", {
-                category: category
-            });
-        } else {
-            res.redirect("/admin/categories");
-        }
-    }).catch(error => {
-        console.log(error);
-        res.redirect("/admin/categories");
-    });
-});
 
 router.post("/categories/update", (req, res) => {
     var id = req.body.id;

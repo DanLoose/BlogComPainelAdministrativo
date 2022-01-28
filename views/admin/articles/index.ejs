@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <%- include("../../partials/header.ejs") %>
+</head>
+
+<body>
+
+    <%- include("../../partials/navbar.ejs") %>
+
+    <div class="container">
+        <br>
+        <a href="/admin/articles/new" class="btn btn-success"> Criar novo Artigo</a>
+        <br>
+        <br>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Slug</th>
+                    <th>Categoria</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <% articles.forEach(article=>{ %>
+
+                <tr>
+                    <td> <%= article.id %> </td>
+                    <td> <%= article.title %> </td>
+                    <td> <%= article.slug %> </td>
+                    <td> <%= article.category.title %> </td>
+                    <td>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+
+                            <!-- BOTAO EDIT  -->
+                            <form action="/admin/articles/edit/<%= article.id %> " method="get">
+                                <button class="btn btn-warning" id="edit">Editar</button>
+                            </form>
+
+                            <!-- BOTAO DELETE  -->
+                            <form action="/articles/delete" method="post" onsubmit="confirmarDelecao(event,this)">
+                                <input type="hidden" name="id" value="<%= article.id %> ">
+                                <button class="btn btn-danger" id="delete">Excluir</button>
+                            </form>
+                    </td>
+                </tr>
+
+                <% }); %>
+
+            </tbody>
+        </table>
+    </div>
+
+
+</body>
+
+<%- include("../../partials/scripts.ejs") %>
+<script>
+    function confirmarDelecao(event, form) {
+        event.preventDefault();
+        var choice = confirm("Você quer deletar este artigo?");
+        if (choice) {
+            form.submit();
+        }
+    };
+</script>
+
+</html>
