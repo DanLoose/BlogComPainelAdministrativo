@@ -32,14 +32,18 @@
                     <th> <%= category.slug %> </th>
                     <th>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <form>
-                                <input type="hidden" name="id" value="<%= category.id %>">
+
+                            <!-- BOTAO EDIT  -->
+                            <form action="/admin/categories/edit/<%= category.id  %>" method="get">
                                 <button class="btn btn-warning">Editar</button>
                             </form>
+
+                            <!-- BOTAO DELETE  -->
                             <form action="/categories/delete" method="POST" onsubmit="confirmarDelecao(event, this)">
                                 <input type="hidden" name="id" value="<%= category.id %>">
                                 <button class="btn btn-danger" id="delete">Excluir</button>
                             </form>
+
                         </div>
                     </th>
                 </tr>
