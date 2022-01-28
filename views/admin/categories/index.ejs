@@ -31,8 +31,16 @@
                     <th> <%= category.title %> </th>
                     <th> <%= category.slug %> </th>
                     <th>
-                        <button class="btn btn-warning">Editar</button>
-                        <button class="btn btn-danger">Excluir</button>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <form>
+                                <input type="hidden" name="id" value="<%= category.id %>">
+                                <button class="btn btn-warning">Editar</button>
+                            </form>
+                            <form action="/categories/delete" method="POST" onsubmit="confirmarDelecao(event, this)">
+                                <input type="hidden" name="id" value="<%= category.id %>">
+                                <button class="btn btn-danger" id="delete">Excluir</button>
+                            </form>
+                        </div>
                     </th>
                 </tr>
                 <% }); %>
@@ -43,6 +51,16 @@
 
 
 </body>
+
 <%- include("../../partials/scripts.ejs") %>
+<script>
+    function confirmarDelecao(event, form) {
+        event.preventDefault();
+        var choice = confirm("Você quer deletar esta categoria?");
+        if (choice) {
+            form.submit();
+        }
+    };
+</script>
 
 </html>
