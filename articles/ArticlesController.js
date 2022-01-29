@@ -47,7 +47,7 @@ router.get("/admin/articles/edit/:id", (req, res) => {
 
 router.get("/articles/page/:num", (req, res) => {
     var page = req.params.num;
-    const limit = 4;
+    const limit = 1;
 
     if (isNaN(page)) page = 1;
 
@@ -55,7 +55,23 @@ router.get("/articles/page/:num", (req, res) => {
         limit: limit,
         offset: (page - 1) * limit
     }).then(articles => {
-        res.json(articles);
+
+        const numArticles = articles.count;
+        var maxPages = (numArticles % limit != 0) ? Math.floor((numArticles) / limit + 1) : numArticles / limit;
+        var hasAnotherPage = (page < maxPages) ? true : false;
+
+        Category.findAll().then(categories => {
+
+            res.render("admin/articles/page", {
+                result: {
+                    next: hasAnotherPage,
+                    page: parseInt(page),
+                    articles: articles
+                },
+                categories: categories
+            });
+        });
+
     });
 });
 
