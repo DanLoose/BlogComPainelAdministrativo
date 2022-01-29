@@ -4,9 +4,11 @@ const body_parser = require("body-parser");
 const connection = require("./database/database");
 const categoriesController = require("./categories/CategoriesController.js");
 const articlesController = require("./articles/ArticlesController.js");
+const userController = require("./user/userController.js");
 
 const Article = require("./articles/Article.js");
 const Category = require("./categories/Category.js");
+const User = require("./user/User");
 
 //  === BASIC SETTINGS ===
 const app = express();
@@ -28,6 +30,7 @@ connection
 //  === SETTING ROUTER ===
 app.use("/", categoriesController);
 app.use("/", articlesController);
+app.use("/", userController);
 
 //  === ROUTES ===
 app.get("/", (req, res) => {
